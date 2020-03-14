@@ -10,18 +10,16 @@ namespace GameOfLife
             var map = new Map();
             while (true)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(300);
                 Console.Clear();
-                for (int i = 0; i < map.Cells.GetLength(0); i++)
+                for (int i = 0; i < map.Width; i++)
                 {
-                    for (int j = 0; j < map.Cells.GetLength(1); j++)
+                    for (int j = 0; j < map.Height; j++)
                     {
                         if (map.Cells[i, j])
                             Console.Write("#");
                         else
-                        {
                             Console.Write(".");
-                        }
                     }
 
                     Console.WriteLine();
@@ -36,20 +34,25 @@ namespace GameOfLife
     {
         public bool[,] Cells;
 
+        public int Width => Cells.GetLength(0);
+        public int Height => Cells.GetLength(1);
+
         public Map()
         {
             this.Cells = new bool[10,10];
             Cells[4, 4] = true;
             Cells[4, 5] = true;
             Cells[4, 3] = true;
+            Cells[3, 3] = true;
+            Cells[2, 4] = true;
         }
 
         public void NextTurn()
         {
-            var newMap = new bool[Cells.GetLength(0), Cells.GetLength(1)];
-            for (int x = 0; x < Cells.GetLength(0); x++)
+            var newMap = new bool[Width, Height];
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < Cells.GetLength(1); y++)
+                for (int y = 0; y < Height; y++)
                 {
                     var count = GetCountAround(x, y);
                     if (!Cells[x, y] && count == 3)
@@ -81,16 +84,12 @@ namespace GameOfLife
 
         private bool Get(int x, int y)
         {
-            while (x < 0)
-            {
-                x = Cells.GetLength(0) - x;
-            }
-
-            while (y < 0)
-            {
-                y = Cells.GetLength(1) - y;
-            }
-            return Cells[x % Cells.GetLength(0), y % Cells.GetLength(1)];
+            x %= Width;
+            if (x < 0) x = Width + x;
+            y %= Height;
+            if (y < 0) y = Height + y;
+            
+            return Cells[x, y];
         }
     }
 }
