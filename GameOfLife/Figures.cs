@@ -2,17 +2,7 @@ namespace GameOfLife
 {
     public static class Figures
     {
-        public static bool[,] HorizontalBlinker
-        {
-            get
-            {
-                var result = new bool[3, 1];
-                result[0, 0] = true;
-                result[0, 1] = true;
-                result[0, 2] = true;
-                return result;
-            }
-        }
+        public static bool[,] HorizontalBlinker => new [,] {{true, true, true}};
 
         public static bool[,] Glaider
         {
