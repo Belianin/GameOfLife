@@ -2,14 +2,14 @@ namespace GameOfLife
 {
     public class Map
     {
-        public bool[,] Cells;
+        private bool[,] cells;
 
-        public int Width => Cells.GetLength(0);
-        public int Height => Cells.GetLength(1);
+        public int Width => cells.GetLength(0);
+        public int Height => cells.GetLength(1);
 
         public Map(int width, int height)
         {
-            this.Cells = new bool[width, height];
+            this.cells = new bool[width, height];
         }
 
         public void NextTurn()
@@ -22,12 +22,12 @@ namespace GameOfLife
                     var count = GetCountAround(x, y);
                     if (count == 3)
                         newMap[x, y] = true;
-                    else if (count == 2 && Cells[x, y])
+                    else if (count == 2 && cells[x, y])
                         newMap[x, y] = true;
                 }
             }
 
-            Cells = newMap;
+            cells = newMap;
         }
 
         public void AddFigure(int x, int y, bool[,] figure)
@@ -36,7 +36,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < figure.GetLength(1); j++)
                 {
-                    Set(x + i, y + j, figure[i, j]);
+                    this[x + i, y + j] = figure[i, j];
                 }
             }
         }
@@ -48,35 +48,37 @@ namespace GameOfLife
             {
                 for (int j = -1; j < 2; j++)
                 {
-                    if (IsAlive(x + i, y + j))
+                    if (this[x + i, y + j])
                         sum++;
                 }
             }
 
-            if (IsAlive(x, y))
+            if (this[x, y])
                 sum--;
 
             return sum;
         }
 
-        private bool IsAlive(int x, int y)
+        public bool this[int x, int y]
         {
-            x %= Width;
-            if (x < 0) x = Width + x;
-            y %= Height;
-            if (y < 0) y = Height + y;
+            get
+            {
+                x %= Width;
+                if (x < 0) x = Width + x;
+                y %= Height;
+                if (y < 0) y = Height + y;
             
-            return Cells[x, y];
-        }
+                return cells[x, y];
+            }
+            set
+            {
+                x %= Width;
+                if (x < 0) x = Width + x;
+                y %= Height;
+                if (y < 0) y = Height + y;
 
-        private void Set(int x, int y, bool value)
-        {
-            x %= Width;
-            if (x < 0) x = Width + x;
-            y %= Height;
-            if (y < 0) y = Height + y;
-
-            Cells[x, y] = value;
+                cells[x, y] = value;
+            }
         }
     }
 }

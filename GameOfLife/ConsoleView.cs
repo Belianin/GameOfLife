@@ -16,7 +16,7 @@ namespace GameOfLife
                 {
                     for (int j = 0; j < map.Height; j++)
                     {
-                        if (map.Cells[i, j])
+                        if (map[i, j])
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write("#");
