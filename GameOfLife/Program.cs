@@ -7,7 +7,8 @@ namespace GameOfLife
     {
         public static void Main()
         {
-            var map = new Map();
+            var map = new Map(10, 20);
+            map.AddFigure(5, 5, Figures.Glaider);
             while (true)
             {
                 Thread.Sleep(300);
@@ -37,6 +38,35 @@ namespace GameOfLife
         }
     }
 
+    public static class Figures
+    {
+        public static bool[,] HorizontalBlinker
+        {
+            get
+            {
+                var result = new bool[3, 1];
+                result[0, 0] = true;
+                result[0, 1] = true;
+                result[0, 2] = true;
+                return result;
+            }
+        }
+
+        public static bool[,] Glaider
+        {
+            get
+            {
+                var result = new bool[3, 3];
+                result[2, 0] = true;
+                result[2, 1] = true;
+                result[2, 2] = true;
+                result[1, 2] = true;
+                result[0, 1] = true;
+                return result;
+            }
+        }
+    }
+
     public class Map
     {
         public bool[,] Cells;
@@ -44,14 +74,9 @@ namespace GameOfLife
         public int Width => Cells.GetLength(0);
         public int Height => Cells.GetLength(1);
 
-        public Map()
+        public Map(int width, int height)
         {
-            this.Cells = new bool[10,10];
-            Cells[4, 4] = true;
-            Cells[4, 5] = true;
-            Cells[4, 3] = true;
-            Cells[3, 3] = true;
-            Cells[2, 4] = true;
+            this.Cells = new bool[width, height];
         }
 
         public void NextTurn()
@@ -70,6 +95,17 @@ namespace GameOfLife
             }
 
             Cells = newMap;
+        }
+
+        public void AddFigure(int x, int y, bool[,] figure)
+        {
+            for (int i = 0; i < figure.GetLength(0); i++)
+            {
+                for (int j = 0; j < figure.GetLength(1); j++)
+                {
+                    Set(x + i, y + j, figure[i, j]);
+                }
+            }
         }
 
         private int GetCountAround(int x, int y)
@@ -98,6 +134,16 @@ namespace GameOfLife
             if (y < 0) y = Height + y;
             
             return Cells[x, y];
+        }
+
+        private void Set(int x, int y, bool value)
+        {
+            x %= Width;
+            if (x < 0) x = Width + x;
+            y %= Height;
+            if (y < 0) y = Height + y;
+
+            Cells[x, y] = value;
         }
     }
 }
