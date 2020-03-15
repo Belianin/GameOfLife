@@ -62,9 +62,9 @@ namespace GameOfLife
                 for (int y = 0; y < Height; y++)
                 {
                     var count = GetCountAround(x, y);
-                    if (!Cells[x, y] && count == 3)
+                    if (count == 3)
                         newMap[x, y] = true;
-                    else if (Cells[x, y] && (count == 2 || count == 3))
+                    else if (count == 2 && Cells[x, y])
                         newMap[x, y] = true;
                 }
             }
@@ -79,17 +79,18 @@ namespace GameOfLife
             {
                 for (int j = -1; j < 2; j++)
                 {
-                    if (i == 0 && j == 0)
-                        continue;
-                    if (Get(x + i, y + j))
+                    if (IsAlive(x + i, y + j))
                         sum++;
                 }
             }
 
+            if (IsAlive(x, y))
+                sum--;
+
             return sum;
         }
 
-        private bool Get(int x, int y)
+        private bool IsAlive(int x, int y)
         {
             x %= Width;
             if (x < 0) x = Width + x;
