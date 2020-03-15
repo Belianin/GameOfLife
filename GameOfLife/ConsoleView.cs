@@ -5,18 +5,18 @@ namespace GameOfLife
 {
     public class ConsoleView : ILifeView
     {
-        public void Run(Map map, CancellationToken token)
+        public void Run(Game game, CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
                 Thread.Sleep(300);
                 Console.Clear();
                 Console.CursorVisible = false;
-                for (int i = 0; i < map.Width; i++)
+                for (int i = 0; i < game.Width; i++)
                 {
-                    for (int j = 0; j < map.Height; j++)
+                    for (int j = 0; j < game.Height; j++)
                     {
-                        if (map[i, j])
+                        if (game[i, j])
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write("#");
@@ -31,7 +31,7 @@ namespace GameOfLife
                     Console.WriteLine();
                 }
                 
-                map.NextTurn();
+                game.NextTurn();
             }
         }
     }

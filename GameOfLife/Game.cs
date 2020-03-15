@@ -1,13 +1,13 @@
 namespace GameOfLife
 {
-    public class Map
+    public class Game
     {
         private bool[,] cells;
 
         public int Width => cells.GetLength(0);
         public int Height => cells.GetLength(1);
 
-        public Map(int width, int height)
+        public Game(int width, int height)
         {
             this.cells = new bool[width, height];
         }
