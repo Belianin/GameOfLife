@@ -1,4 +1,8 @@
-﻿namespace GameOfLife
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace GameOfLife
 {
     public static class Program
     {
@@ -6,9 +10,13 @@
         {
             var map = new Map(10, 20);
             map.AddFigure(5, 5, Figures.Glaider);
-            
+
+            var cts = new CancellationTokenSource();
             var view = new ConsoleView();
-            view.Run(map);
+            Task.Run(() => view.Run(map, cts.Token), cts.Token);
+
+            Console.ReadKey();
+            cts.Cancel();
         }
     }
 }

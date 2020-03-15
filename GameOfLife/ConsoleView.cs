@@ -5,9 +5,9 @@ namespace GameOfLife
 {
     public class ConsoleView : ILifeView
     {
-        public void Run(Map map)
+        public void Run(Map map, CancellationToken token)
         {
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 Thread.Sleep(300);
                 Console.Clear();
